@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
 import { getPostBySlug, getAllSlugs, urlFor } from '@/lib/sanity'
 import { formatDate, categoryLabel, youtubeId } from '@/lib/utils'
+import { countryLabel } from '@/lib/countries'
 import type { Metadata } from 'next'
 
 export const revalidate = 60
@@ -17,6 +18,30 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const post = await getPostBySlug(params.slug)
   if (!post) return {}
   return { title: post.title, description: post.excerpt }
+}
+
+function PostTags({ post }: { post: any }) {
+  const composers: { _id: string; name: string; slug: string }[] = post.composers || []
+  const titles: { _id: string; name: string; kind?: string; slug: string }[] = post.titles || []
+  const years: number[] = post.years || []
+  const countries: string[] = post.countries || []
+  if (!composers.length && !titles.length && !years.length && !countries.length) return null
+  return (
+    <div className="tag-row">
+      {composers.map((c) => (
+        <Link key={`c-${c._id}`} href={`/composer/${c.slug}`} className="tag">{c.name}</Link>
+      ))}
+      {titles.map((t) => (
+        <Link key={`t-${t._id}`} href={`/title/${t.slug}`} className="tag">{t.name}</Link>
+      ))}
+      {years.map((y) => (
+        <Link key={`y-${y}`} href={`/year/${y}`} className="tag">{y}</Link>
+      ))}
+      {countries.map((code) => (
+        <Link key={`co-${code}`} href={`/country/${code}`} className="tag">{countryLabel(code)}</Link>
+      ))}
+    </div>
+  )
 }
 
 const components = {
@@ -64,6 +89,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
           {post.subject ? `${post.subject} · ` : ''}{formatDate(post.publishedAt)}
         </div>
         {post.excerpt && <p className="article-excerpt">{post.excerpt}</p>}
+        <PostTags post={post} />
       </header>
 
       <article className="article-body">
