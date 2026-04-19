@@ -2,8 +2,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
 import { getPostBySlug, getAllSlugs, urlFor } from '@/lib/sanity'
-import { formatDate, categoryLabel, youtubeId } from '@/lib/utils'
+import { formatDate, youtubeId, readingTimeMinutes } from '@/lib/utils'
 import { countryLabel } from '@/lib/countries'
+import Nav from '@/app/components/Nav'
+import RelatedPosts from '@/app/components/RelatedPosts'
 import type { Metadata } from 'next'
 
 export const revalidate = 60
@@ -63,33 +65,35 @@ export default async function PostPage({ params }: { params: { slug: string } })
   const post = await getPostBySlug(params.slug)
   if (!post) notFound()
 
+  const minutes = readingTimeMinutes(post.body)
+
   return (
     <main className="container">
-      <nav className="nav">
-        <Link href="/" className="nav-name">{SITE_NAME}</Link>
-        <div className="nav-links">
-          <Link href="/">writing</Link>
-          <Link href="/about">about</Link>
-        </div>
-      </nav>
+      <Nav />
 
       <Link href="/" className="back-link">← All writing</Link>
 
       <header className="article-header">
         {post.coverImage && (
-          <img
-            className="article-cover"
-            src={urlFor(post.coverImage).width(1400).url()}
-            alt={post.coverImage.alt || post.title}
-          />
+          <figure className="article-cover-figure">
+            <img
+              className="article-cover"
+              src={urlFor(post.coverImage).width(1400).url()}
+              alt={post.coverImage.alt || post.title}
+            />
+            {post.coverImage.caption && (
+              <figcaption className="article-cover-caption">{post.coverImage.caption}</figcaption>
+            )}
+          </figure>
         )}
-        {post.category && <div className="mono-label">{categoryLabel(post.category)}</div>}
         <h1 className="article-title">{post.title}</h1>
+        <PostTags post={post} />
         <div className="article-meta">
-          {post.subject ? `${post.subject} · ` : ''}{formatDate(post.publishedAt)}
+          {post.subject ? `${post.subject} · ` : ''}
+          {formatDate(post.publishedAt)}
+          {minutes ? ` · ${minutes} min read` : ''}
         </div>
         {post.excerpt && <p className="article-excerpt">{post.excerpt}</p>}
-        <PostTags post={post} />
       </header>
 
       <article className="article-body">
@@ -115,6 +119,8 @@ export default async function PostPage({ params }: { params: { slug: string } })
             ))}
         </aside>
       )}
+
+      <RelatedPosts post={post} />
 
       {post.links && post.links.length > 0 && (
         <aside className="further-reading">
