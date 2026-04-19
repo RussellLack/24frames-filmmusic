@@ -14,14 +14,16 @@ export default function PostList({ posts }: { posts: PostRow[] }) {
     return <p className="empty-list">No posts.</p>
   }
   return (
-    <>
+    <ul className="post-index">
       {posts.map((post) => (
-        <Link key={post._id} href={`/blog/${post.slug.current}`} className="post-row">
-          <span className="post-title">{post.title}</span>
-          {post.subject && <span className="post-subject">{post.subject}</span>}
-          <span className="post-date">{formatDate(post.publishedAt, 'short')}</span>
-        </Link>
+        <li key={post._id} className="post-entry">
+          <Link href={`/blog/${post.slug.current}`} className="post-entry-link">
+            <span className="post-entry-date">{formatDate(post.publishedAt, 'short')}</span>
+            <h2 className="post-entry-title">{post.title}</h2>
+            {post.subject && <p className="post-entry-subject">{post.subject}</p>}
+          </Link>
+        </li>
       ))}
-    </>
+    </ul>
   )
 }

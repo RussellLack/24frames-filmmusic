@@ -56,12 +56,55 @@ body { font-family: var(--serif); background: var(--paper); color: var(--ink); l
 .browse-link { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.04em; color: var(--ink-muted); text-decoration: none; transition: color 0.15s; }
 .browse-link:hover { color: var(--ink); }
 
-/* --- Post list rows --- */
-.post-row { display: flex; gap: 1.25rem; align-items: baseline; padding: 0.9rem 0; border-bottom: 0.5px solid var(--border); text-decoration: none; color: inherit; transition: opacity 0.15s; }
-.post-row:hover { opacity: 0.55; }
-.post-title { font-size: 1rem; font-weight: 400; flex: 1; line-height: 1.4; }
-.post-subject { font-family: var(--mono); font-size: 0.58rem; color: var(--ink-faint); white-space: nowrap; }
-.post-date { font-family: var(--mono); font-size: 0.58rem; color: var(--ink-faint); white-space: nowrap; }
+/* --- Post index (listings) --- */
+.post-index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 0.5px solid var(--border);
+}
+.post-entry {
+  border-bottom: 0.5px solid var(--border);
+}
+.post-entry-link {
+  display: block;
+  padding: 1.5rem 0;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.post-entry-link:hover { opacity: 0.7; }
+.post-entry-link:hover .post-entry-title { border-color: var(--ink-faint); }
+
+.post-entry-date {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.5rem;
+}
+.post-entry-title {
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5rem;
+  display: inline;
+  border-bottom: 0.5px solid transparent;
+  transition: border-color 0.15s;
+}
+.post-entry-subject {
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink-muted);
+  margin-top: 0.6rem;
+  margin-bottom: 0;
+  max-width: 60ch;
+}
 
 /* --- Article --- */
 .article-header { margin-bottom: 2.5rem; }
@@ -215,8 +258,8 @@ body { font-family: var(--serif); background: var(--paper); color: var(--ink); l
   .nav { margin-bottom: 2.25rem; }
   .hero-title { font-size: 2rem; }
   .article-title { font-size: 1.75rem; }
-  .post-row { flex-wrap: wrap; gap: 0.5rem 1rem; }
-  .post-title { flex-basis: 100%; }
-  .post-subject, .post-date { font-size: 0.56rem; }
+  .post-entry-link { padding: 1.25rem 0; }
+  .post-entry-title { font-size: 1.2rem; }
+  .post-entry-subject { font-size: 0.95rem; }
   .tag { font-size: 0.54rem; padding: 0.28rem 0.5rem; }
 }

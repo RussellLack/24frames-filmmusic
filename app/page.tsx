@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getAllPosts, getHeroPost, urlFor } from '@/lib/sanity'
 import { formatDate } from '@/lib/utils'
 import Nav from '@/app/components/Nav'
+import PostList from '@/app/components/PostList'
 
 export const revalidate = 60
 const SITE_NAME = '24 Frames Under'
@@ -39,13 +40,7 @@ export default async function Home() {
         <Link href="/topics" className="browse-link">Browse topics →</Link>
       </div>
 
-      {rest.map((post: any) => (
-        <Link key={post._id} href={`/blog/${post.slug.current}`} className="post-row">
-          <span className="post-title">{post.title}</span>
-          {post.subject && <span className="post-subject">{post.subject}</span>}
-          <span className="post-date">{formatDate(post.publishedAt, 'short')}</span>
-        </Link>
-      ))}
+      <PostList posts={rest} />
 
       <footer className="footer">
         <span>© {new Date().getFullYear()} Russell Lack</span>

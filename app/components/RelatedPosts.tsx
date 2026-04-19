@@ -71,13 +71,17 @@ export default async function RelatedPosts({ post, limit = 6 }: { post: Post; li
   return (
     <aside className="related-posts">
       <div className="mono-label">More from this site</div>
-      {ranked.map((p) => (
-        <Link key={p._id} href={`/blog/${p.slug.current}`} className="post-row">
-          <span className="post-title">{p.title}</span>
-          {p.subject && <span className="post-subject">{p.subject}</span>}
-          <span className="post-date">{formatDate(p.publishedAt, 'short')}</span>
-        </Link>
-      ))}
+      <ul className="post-index">
+        {ranked.map((p) => (
+          <li key={p._id} className="post-entry">
+            <Link href={`/blog/${p.slug.current}`} className="post-entry-link">
+              <span className="post-entry-date">{formatDate(p.publishedAt, 'short')}</span>
+              <h3 className="post-entry-title">{p.title}</h3>
+              {p.subject && <p className="post-entry-subject">{p.subject}</p>}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </aside>
   )
 }
