@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
 import { getPostBySlug, getAllSlugs, urlFor } from '@/lib/sanity'
-import { formatDate, categoryLabel } from '@/lib/utils'
+import { formatDate, categoryLabel, youtubeId } from '@/lib/utils'
 import type { Metadata } from 'next'
 
 export const revalidate = 60
@@ -69,6 +69,26 @@ export default async function PostPage({ params }: { params: { slug: string } })
       <article className="article-body">
         <PortableText value={post.body} components={components} />
       </article>
+
+      {post.youtubeUrls && post.youtubeUrls.length > 0 && (
+        <aside className="video-list">
+          <div className="mono-label">Watch</div>
+          {post.youtubeUrls
+            .map((url: string) => ({ url, id: youtubeId(url) }))
+            .filter((v: { id: string | null }) => v.id)
+            .map((v: { url: string; id: string }) => (
+              <div key={v.id} className="video-embed">
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${v.id}`}
+                  title="YouTube video"
+                  loading="lazy"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            ))}
+        </aside>
+      )}
 
       {post.links && post.links.length > 0 && (
         <aside className="further-reading">

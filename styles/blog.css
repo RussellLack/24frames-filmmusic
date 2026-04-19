@@ -24,7 +24,7 @@ body { font-family: var(--serif); background: var(--paper); color: var(--ink); l
 
 .mono-label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.6rem; }
 
-.hero-image { width: 100%; aspect-ratio: 16/7; object-fit: cover; display: block; margin-bottom: 1.5rem; filter: grayscale(20%); }
+.hero-image { width: 100%; height: auto; max-height: 60vh; object-fit: contain; display: block; margin-bottom: 1.5rem; filter: grayscale(20%); }
 .hero-title { font-size: 2.6rem; font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
 .hero-subject { font-family: var(--mono); font-size: 0.62rem; color: var(--ink-faint); letter-spacing: 0.06em; margin-bottom: 1rem; }
 .hero-excerpt { font-size: 1.05rem; line-height: 1.8; color: var(--ink-muted); margin-bottom: 1.25rem; max-width: 560px; }
@@ -46,7 +46,7 @@ body { font-family: var(--serif); background: var(--paper); color: var(--ink); l
 .post-date { font-family: var(--mono); font-size: 0.58rem; color: var(--ink-faint); white-space: nowrap; }
 
 .article-header { margin-bottom: 2.5rem; }
-.article-cover { width: 100%; aspect-ratio: 16/7; object-fit: cover; display: block; margin-bottom: 2rem; filter: grayscale(20%); }
+.article-cover { width: 100%; height: auto; max-height: 60vh; object-fit: contain; display: block; margin-bottom: 2rem; filter: grayscale(20%); }
 .article-title { font-size: 2.2rem; font-weight: 400; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
 .article-meta { font-family: var(--mono); font-size: 0.6rem; color: var(--ink-faint); letter-spacing: 0.04em; }
 .article-excerpt { font-size: 1.05rem; line-height: 1.8; color: var(--ink-muted); border-left: 1.5px solid var(--border-mid); padding-left: 1.25rem; margin: 1.5rem 0 0; font-style: italic; }
@@ -71,6 +71,30 @@ body { font-family: var(--serif); background: var(--paper); color: var(--ink); l
   margin-top: 3rem;
   padding-top: 1.5rem;
   border-top: 0.5px solid var(--border-mid);
+}
+
+.video-list {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 0.5px solid var(--border-mid);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 .links-list {
