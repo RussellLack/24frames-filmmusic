@@ -1,8 +1,14 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getComposerBySlug, getAllComposerSlugs, getPostsByComposerSlug } from '@/lib/sanity'
+import {
+  getComposerBySlug,
+  getAllComposerSlugs,
+  getPostsByComposerSlug,
+  getComposerCrossRefs,
+} from '@/lib/sanity'
 import TagPageShell from '@/app/components/TagPageShell'
 import PostList from '@/app/components/PostList'
+import CrossRefs from '@/app/components/CrossRefs'
 
 export const revalidate = 60
 
@@ -18,12 +24,28 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function ComposerPage({ params }: { params: { slug: string } }) {
-  const composer = await getComposerBySlug(params.slug)
+  const [composer, posts, refs] = await Promise.all([
+    getComposerBySlug(params.slug),
+    getPostsByComposerSlug(params.slug),
+    getComposerCrossRefs(params.slug),
+  ])
   if (!composer) notFound()
-  const posts = await getPostsByComposerSlug(params.slug)
 
   return (
-    <TagPageShell kicker="Composer" heading={composer.name}>
+    <TagPageShell
+      kicker="Composer"
+      heading={composer.name}
+      count={posts.length}
+      crossRefs={
+        <CrossRefs
+          composers={refs?.coComposers}
+          titles={refs?.titles}
+          years={refs?.years}
+          countries={refs?.countries}
+          title="Also tagged"
+        />
+      }
+    >
       <PostList posts={posts} />
     </TagPageShell>
   )

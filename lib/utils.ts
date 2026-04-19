@@ -4,11 +4,6 @@ export function formatDate(dateString: string, style: 'long' | 'short' = 'long')
   return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-export function categoryLabel(category: string): string {
-  const map: Record<string, string> = { score: 'score', composer: 'composer', soundtrack: 'soundtrack', essay: 'essay' }
-  return map[category] ?? category
-}
-
 export function youtubeId(url: string): string | null {
   try {
     const u = new URL(url)
@@ -23,4 +18,19 @@ export function youtubeId(url: string): string | null {
   } catch {
     return null
   }
+}
+
+// Estimate reading time from Portable Text blocks. ~220 wpm.
+export function readingTimeMinutes(body: any[] | undefined | null): number {
+  if (!body || !Array.isArray(body)) return 0
+  let words = 0
+  for (const block of body) {
+    if (block?._type !== 'block' || !Array.isArray(block.children)) continue
+    for (const child of block.children) {
+      if (typeof child?.text === 'string') {
+        words += child.text.trim().split(/\s+/).filter(Boolean).length
+      }
+    }
+  }
+  return Math.max(1, Math.round(words / 220))
 }
