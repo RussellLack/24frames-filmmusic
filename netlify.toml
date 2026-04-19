@@ -4,3 +4,11 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Slug redirects for posts whose slug changed after publish.
+# Append new entries here rather than changing URLs silently.
+[[redirects]]
+  from = "/blog/sound-of-a-small-man-unravelling-rob-mazurek-the-mastermind-original-score-mubi-filmscience-2025"
+  to = "/blog/man-unravelling"
+  status = 301
+  force = true
