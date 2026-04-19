@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getAllPosts, getLatestPost, urlFor } from '@/lib/sanity'
+import { getAllPosts, getHeroPost, urlFor } from '@/lib/sanity'
 import { formatDate } from '@/lib/utils'
 import Nav from '@/app/components/Nav'
 
@@ -7,29 +7,29 @@ export const revalidate = 60
 const SITE_NAME = '24 Frames Under'
 
 export default async function Home() {
-  const [latest, allPosts] = await Promise.all([getLatestPost(), getAllPosts()])
-  const rest = allPosts.filter((p: any) => p._id !== latest?._id)
+  const [hero, allPosts] = await Promise.all([getHeroPost(), getAllPosts()])
+  const rest = allPosts.filter((p: any) => p._id !== hero?._id)
 
   return (
     <main className="container">
       <Nav />
 
-      {latest && (
+      {hero && (
         <>
-          <div className="mono-label">Latest</div>
-          {latest.coverImage && (
+          <div className="mono-label">{hero.featured ? 'Featured' : 'Latest'}</div>
+          {hero.coverImage && (
             <img
               className="hero-image"
-              src={urlFor(latest.coverImage).width(1400).url()}
-              alt={latest.coverImage.alt || latest.title}
+              src={urlFor(hero.coverImage).width(1400).url()}
+              alt={hero.coverImage.alt || hero.title}
             />
           )}
-          <h1 className="hero-title">{latest.title}</h1>
+          <h1 className="hero-title">{hero.title}</h1>
           <div className="hero-subject">
-            {latest.subject ? `${latest.subject} · ` : ''}{formatDate(latest.publishedAt)}
+            {hero.subject ? `${hero.subject} · ` : ''}{formatDate(hero.publishedAt)}
           </div>
-          {latest.excerpt && <p className="hero-excerpt">{latest.excerpt}</p>}
-          <Link href={`/blog/${latest.slug.current}`} className="read-link">Read →</Link>
+          {hero.excerpt && <p className="hero-excerpt">{hero.excerpt}</p>}
+          <Link href={`/blog/${hero.slug.current}`} className="read-link">Read →</Link>
           <hr className="divider" />
         </>
       )}

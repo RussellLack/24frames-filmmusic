@@ -17,6 +17,12 @@ export const metadata: Metadata = {
     description: 'On film music, buried and otherwise.',
   },
   robots: { index: true, follow: true },
+  alternates: {
+    canonical: '/',
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

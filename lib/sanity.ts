@@ -38,6 +38,21 @@ export async function getLatestPost() {
   )
 }
 
+// Hero for the homepage: prefer featured posts (most recent among them),
+// fallback to plain latest if none are featured.
+export async function getHeroPost() {
+  return client.fetch(
+    `coalesce(
+      *[_type == "post" && featured == true] | order(publishedAt desc)[0] {
+        _id, title, slug, publishedAt, subject, excerpt, coverImage, "featured": true
+      },
+      *[_type == "post"] | order(publishedAt desc)[0] {
+        _id, title, slug, publishedAt, subject, excerpt, coverImage, "featured": false
+      }
+    )`,
+  )
+}
+
 export async function getAllSlugs() {
   return client.fetch(`*[_type == "post"] { "slug": slug.current }`)
 }
