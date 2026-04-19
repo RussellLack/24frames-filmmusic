@@ -38,7 +38,6 @@ export default async function Home({ searchParams }: { searchParams: { category?
         <nav className="filter-bar">
           <Link href="/" className={!activeCategory ? 'active' : ''}>all</Link>
           <Link href="/?category=score" className={activeCategory === 'score' ? 'active' : ''}>scores</Link>
-          <Link href="/?category=composer" className={activeCategory === 'composer' ? 'active' : ''}>composers</Link>
           <Link href="/?category=soundtrack" className={activeCategory === 'soundtrack' ? 'active' : ''}>soundtracks</Link>
           <Link href="/?category=essay" className={activeCategory === 'essay' ? 'active' : ''}>essays</Link>
         </nav>
