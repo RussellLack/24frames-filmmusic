@@ -54,7 +54,7 @@ export async function getHeroPost() {
 }
 
 export async function getAllSlugs() {
-  return client.fetch(`*[_type == "post"] { "slug": slug.current }`)
+  return client.fetch(`*[_type == "post"] { "slug": slug.current, publishedAt }`)
 }
 
 // ---------- Single post ----------
@@ -105,7 +105,7 @@ export async function getComposerBySlug(slug: string) {
 }
 
 export async function getAllComposerSlugs() {
-  return client.fetch(`*[_type == "composer" && defined(slug.current)] { "slug": slug.current }`)
+  return client.fetch(`*[_type == "composer" && defined(slug.current)] { "slug": slug.current, publishedAt }`)
 }
 
 export async function getPostsByComposerSlug(slug: string) {
@@ -142,7 +142,7 @@ export async function getTitleBySlug(slug: string) {
 }
 
 export async function getAllTitleSlugs() {
-  return client.fetch(`*[_type == "title" && defined(slug.current)] { "slug": slug.current }`)
+  return client.fetch(`*[_type == "title" && defined(slug.current)] { "slug": slug.current, publishedAt }`)
 }
 
 export async function getPostsByTitleSlug(slug: string) {
