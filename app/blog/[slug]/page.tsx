@@ -1,3 +1,4 @@
+
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
@@ -10,6 +11,7 @@ import type { Metadata } from 'next'
 
 export const revalidate = 60
 const SITE_NAME = '24 Frames Under'
+const SITE_URL = 'https://24frames-filmmusic.com'
 
 export async function generateStaticParams() {
   const slugs = await getAllSlugs()
@@ -19,7 +21,68 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await getPostBySlug(params.slug)
   if (!post) return {}
-  return { title: post.title, description: post.excerpt }
+
+  const url = `${SITE_URL}/blog/${params.slug}`
+  const ogImage = post.coverImage
+    ? urlFor(post.coverImage).width(1200).height(630).fit('crop').url()
+    : undefined
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alter
+head -5 'app/blog/[slug]/page.tsx'
+
+
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { PortableText } from '@portabletext/react'
+import { getPostBySlug, getAllSlugs, urlFor } from '@/lib/sanity'
+import { formatDate, youtubeId, readingTimeMinutes } from '@/lib/utils'
+import { countryLabel } from '@/lib/countries'
+import Nav from '@/app/components/Nav'
+import RelatedPosts from '@/app/components/RelatedPosts'
+import type { Metadata } from 'next'
+
+export const revalidate = 60
+const SITE_NAME = '24 Frames Under'
+const SITE_URL = 'https://24frames-filmmusic.com'
+
+export async function generateStaticParams() {
+  const slugs = await getAllSlugs()
+  return slugs.map((s: any) => ({ slug: s.slug }))
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const post = await getPostBySlug(params.slug)
+  if (!post) return {}
+
+  const url = `${SITE_URL}/blog/${params.slug}`
+  const ogImage = post.coverImage
+    ? urlFor(post.coverImage).width(1200).height(630).fit('crop').url()
+    : undefined
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'article',
+      url,
+      title: post.title,
+      description: post.excerpt,
+      siteName: SITE_NAME,
+      publishedTime: post.publishedAt,
+      authors: ['Russell Lack'],
+      images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: post.title }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: ogImage ? [ogImage] : undefined,
+    },
+  }
 }
 
 function PostTags({ post }: { post: any }) {
@@ -61,14 +124,62 @@ const components = {
   },
 }
 
+function buildJsonLd(post: any, slug: string) {
+  const url = `${SITE_URL}/blog/${slug}`
+  const filmTitle = post.titles?.find((t: any) => t.kind === 'film')?.name || post.titles?.[0]?.name
+  const composerNames: string[] = (post.composers || []).map((c: any) => c.name)
+
+  const jsonLd: any = {
+    '@context': 'https://schema.org',
+    '@type': filmTitle ? 'Review' : 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    author: {
+      '@type': 'Person',
+      name: 'Russell Lack',
+      url: `${SITE_URL}/about`,
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Russell Lack',
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    url,
+  }
+
+  if (post.coverImage) {
+    jsonLd.image = urlFor(post.coverImage).width(1200).url()
+  }
+
+  if (filmTitle) {
+    jsonLd.itemReviewed = {
+      '@type': 'Movie',
+      name: filmTitle,
+      ...(composerNames.length && {
+        musicBy: composerNames.map((name) => ({ '@type': 'Person', name })),
+      }),
+    }
+  }
+
+  return jsonLd
+}
+
 export default async function PostPage({ params }: { params: { slug: string } }) {
   const post = await getPostBySlug(params.slug)
   if (!post) notFound()
 
   const minutes = readingTimeMinutes(post.body)
+  const jsonLd = buildJsonLd(post, params.slug)
 
   return (
     <main className="container">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <Nav />
 
       <Link href="/" className="back-link">← All writing</Link>
