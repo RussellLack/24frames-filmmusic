@@ -1,39 +1,3 @@
-
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { PortableText } from '@portabletext/react'
-import { getPostBySlug, getAllSlugs, urlFor } from '@/lib/sanity'
-import { formatDate, youtubeId, readingTimeMinutes } from '@/lib/utils'
-import { countryLabel } from '@/lib/countries'
-import Nav from '@/app/components/Nav'
-import RelatedPosts from '@/app/components/RelatedPosts'
-import type { Metadata } from 'next'
-
-export const revalidate = 60
-const SITE_NAME = '24 Frames Under'
-const SITE_URL = 'https://24frames-filmmusic.com'
-
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs()
-  return slugs.map((s: any) => ({ slug: s.slug }))
-}
-
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug)
-  if (!post) return {}
-
-  const url = `${SITE_URL}/blog/${params.slug}`
-  const ogImage = post.coverImage
-    ? urlFor(post.coverImage).width(1200).height(630).fit('crop').url()
-    : undefined
-
-  return {
-    title: post.title,
-    description: post.excerpt,
-    alter
-head -5 'app/blog/[slug]/page.tsx'
-
-
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
