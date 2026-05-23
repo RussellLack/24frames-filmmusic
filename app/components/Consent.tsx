@@ -23,7 +23,7 @@ declare global {
  * denied until they explicitly Accept. The banner's buttons send a
  * gtag('consent','update',...) so tags respond without a reload.
  *
- * The GA4 tag in GTM (GTM-M88MJ7PJ -> G-548NDBH1F3) must fire on
+ * The GA4 tag in GTM (GTM-PVQX4SX2 -> G-548NDBH1F3) must fire on
  * "Initialization - All Pages" for this to collect from everyone.
  */
 const inlineInit = (id: string) => `
