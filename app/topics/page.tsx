@@ -4,7 +4,7 @@ import Nav from '@/app/components/Nav'
 import { getTopicsHub } from '@/lib/sanity'
 import { countryLabel } from '@/lib/countries'
 
-export const revalidate = 60
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Topics',

@@ -5,7 +5,7 @@ import { getAllYears, getPostsByYear } from '@/lib/sanity'
 import TagPageShell from '@/app/components/TagPageShell'
 import PostList from '@/app/components/PostList'
 
-export const revalidate = 60
+export const revalidate = 3600
 
 export async function generateStaticParams() {
   const years = await getAllYears()

@@ -9,7 +9,7 @@ import {
 
 const SITE_URL = 'https://24frames-filmmusic.com'
 
-export const revalidate = 60
+export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [postSlugs, composerSlugs, titleSlugs, years, countries] = await Promise.all([

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "check:sanity": "node scripts/check-sanity-economy.mjs .",
+    "prebuild": "npm run check:sanity",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"

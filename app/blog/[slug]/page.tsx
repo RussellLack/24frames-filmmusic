@@ -8,7 +8,7 @@ import Nav from '@/app/components/Nav'
 import RelatedPosts from '@/app/components/RelatedPosts'
 import type { Metadata } from 'next'
 
-export const revalidate = 60
+export const revalidate = 3600
 const SITE_NAME = '24 Frames Under'
 const SITE_URL = 'https://24frames-filmmusic.com'
 

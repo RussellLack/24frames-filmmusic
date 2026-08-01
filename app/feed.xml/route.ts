@@ -4,7 +4,7 @@ const SITE_URL = 'https://24frames-filmmusic.com'
 const SITE_NAME = '24 Frames Under'
 const SITE_DESCRIPTION = 'On film music, buried and otherwise.'
 
-export const revalidate = 60
+export const revalidate = 3600
 
 function escapeXml(s: string): string {
   return s
